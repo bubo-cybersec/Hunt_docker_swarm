@@ -58,7 +58,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [ node.hostname == debian1 ]
+        constraints: [node.role == manager]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -87,7 +87,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [ node.hostname == debian2 ]
+        constraints: [node.role == worker]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -116,7 +116,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [ node.hostname == debian1 ]
+        constraints: [node.role == manager]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -145,7 +145,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [ node.hostname == debian2 ]
+        constraints: [node.role == worker]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -174,7 +174,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [ node.hostname == debian2 ]
+        constraints: [node.role == worker]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -187,11 +187,6 @@ services:
     environment:
       OPENSEARCH_HOSTS: https://data1:9200
       DISABLE_INSTALL_DEMO_CONFIG: "true"
-    # depends_on: 
-    #     - data1
-    #     - data2
-    #     - data3
-    #     - data4
     ports:
       - target: 5601
         published: 5601
@@ -201,8 +196,6 @@ services:
       - bubo_op
     deploy:
       endpoint_mode: dnsrr
-      # mode: "replicated"
-      # replicas: 1
       update_config:
         failure_action: rollback
         parallelism: 1
@@ -294,11 +287,6 @@ volumes:
     driver_opts:
       sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/master1"
       password: bubo
-  master2:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/master2"
-      password: bubo
   data1:
     driver: vieux/sshfs:latest
     driver_opts:
@@ -339,13 +327,6 @@ volumes:
     driver_opts:
       sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/pipeline/pipeline.conf"  
       password: bubo
-  # logstash:
-  #   driver: local
-  #   driver_opts:
-  #     type: 'none'
-  #     o: 'bind'
-  #     device: '/usr/share/logstash'        
-  # traefik-certificates:
 
 configs:
   process_ioc.rb:
