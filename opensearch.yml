@@ -1,0 +1,41 @@
+cluster.name: opensearch-cluster
+node.name: ${HOSTNAME}
+network.host: 0.0.0.0
+network.publish_host: _eth0_
+
+discovery.seed_hosts:
+    - 'master1'
+    - 'data1'
+    - 'data2'
+    - 'data3'
+    - 'data4'
+    - 'coordinate'
+bootstrap.memory_lock: "true" #disables swapping
+cluster.initial_master_nodes: master1
+cluster.routing.allocation.disk.threshold_enabled: true
+cluster.routing.allocation.disk.watermark.low: 93%
+cluster.routing.allocation.disk.watermark.high: 95%
+
+plugins.security.allow_unsafe_democertificates: true
+plugins.security.ssl.http.enabled: true
+plugins.security.ssl.http.pemtrustedcas_filepath: certificates/ca/ca.pem
+plugins.security.ssl.transport.enabled: true
+plugins.security.ssl.transport.pemtrustedcas_filepath: certificates/ca/ca.pem
+plugins.security.ssl.transport.enforce_hostname_verification: false
+
+plugins.security.ssl.transport.pemkey_filepath: certificates/${HOSTNAME}/${HOSTNAME}.key 
+plugins.security.ssl.transport.pemcert_filepath: certificates/${HOSTNAME}/${HOSTNAME}.pem
+plugins.security.ssl.http.pemkey_filepath: certificates/${HOSTNAME}/${HOSTNAME}.key
+plugins.security.ssl.http.pemcert_filepath: certificates/${HOSTNAME}/${HOSTNAME}.pem
+plugins.security.restapi.roles_enabled: ["all_access","xyz_role"]
+plugins.security.authcz.admin_dn:
+  - 'CN=ADMIN,O=EXAMPLE,L=GARDANNE,ST=PACA,C=FR'
+plugins.security.nodes_dn:
+  - 'CN=master1,O=EXAMPLE,L=GARDANNE,ST=PACA,C=FR'
+  - 'CN=data1,O=EXAMPLE,L=GARDANNE,ST=PACA,C=FR'
+  - 'CN=data2,O=EXAMPLE,L=GARDANNE,ST=PACA,C=FR'
+  - 'CN=data3,O=EXAMPLE,L=GARDANNE,ST=PACA,C=FR'
+  - 'CN=data4,O=EXAMPLE,L=GARDANNE,ST=PACA,C=FR'
+  - 'CN=coordinate,O=EXAMPLE,L=GARDANNE,ST=PACA,C=FR'
+  
+compatibility.override_main_response_version: true
