@@ -221,7 +221,7 @@ services:
         protocol: tcp
         mode: host
     environment:
-      LS_JAVA_OPTS: -Xmx2g -Xms2g
+      LS_JAVA_OPTS: -Xmx4g -Xms4g
     deploy:
       endpoint_mode: dnsrr 
       mode: "replicated"
