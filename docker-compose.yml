@@ -2,7 +2,7 @@ version: '3.7'
 services:
   opensearch_master1:
     restart: always
-    image: opensearchproject/opensearch:2.2.0
+    image: opensearchproject/opensearch:2.4.0
     container_name: master1
     hostname: master1
     ulimits:
@@ -24,13 +24,15 @@ services:
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
+      placement:
+        constraints: [node.role == manager]
     networks:
       - bubo_op
     ports:
-      # - target: 9200
-      #   published: 9200
-      #   protocol: tcp
-      #   mode: host
+      - target: 9200
+        published: 9200
+        protocol: tcp
+        mode: host
       - target: 9300
         published: 9300
         protocol: tcp
@@ -38,7 +40,7 @@ services:
     
   opensearch_data1:
     restart: always
-    image: opensearchproject/opensearch:2.2.0
+    image: opensearchproject/opensearch:2.4.0
     container_name: data1
     hostname: data1
     ulimits:
@@ -58,7 +60,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.role == manager]
+        constraints: [node.hostname == swarm2]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -67,7 +69,7 @@ services:
     
   opensearch_data2:
     restart: always
-    image: opensearchproject/opensearch:2.2.0
+    image: opensearchproject/opensearch:2.4.0
     container_name: data2
     hostname: data2
     ulimits:
@@ -87,7 +89,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.hostname == swarm3]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -96,7 +98,7 @@ services:
     
   opensearch_data3:
     restart: always
-    image: opensearchproject/opensearch:2.2.0
+    image: opensearchproject/opensearch:2.4.0
     container_name: data3
     hostname: data3
     ulimits:
@@ -125,7 +127,7 @@ services:
     
   opensearch_data4:
     restart: always
-    image: opensearchproject/opensearch:2.2.0
+    image: opensearchproject/opensearch:2.4.0
     container_name: data4
     hostname: data4
     ulimits:
@@ -136,7 +138,7 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - "./data4:/usr/share/opensearch/data/"
+      - "./data4/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
     configs:
       - source: opensearch.yml
@@ -145,7 +147,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.hostname == swarm2]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -154,7 +156,7 @@ services:
     
   opensearch_coordinate:
     restart: always
-    image: opensearchproject/opensearch:2.2.0
+    image: opensearchproject/opensearch:2.4.0
     container_name: coordinate
     hostname: coordinate
     ulimits:
@@ -165,7 +167,7 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - "./coordinate:/usr/share/opensearch/data/"
+      - "./coordinate/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
     configs:
       - source: opensearch.yml
@@ -174,7 +176,7 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.hostname == swarm3]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
@@ -183,9 +185,9 @@ services:
     
   opensearch-dashboards:
     restart: always
-    image: opensearchproject/opensearch-dashboards:2.2.0
+    image: opensearchproject/opensearch-dashboards:2.4.0
     environment:
-      OPENSEARCH_HOSTS: https://data1:9200
+      OPENSEARCH_HOSTS: '["https://data1:9200","https://data2:9200","https://data3:9200","https://data4:9200"]'
       DISABLE_INSTALL_DEMO_CONFIG: "true"
     ports:
       - target: 5601
@@ -212,7 +214,7 @@ services:
 
   logstash:
     restart: always
-    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:7.16.3
+    image: opensearchproject/logstash-oss-with-opensearch-output-plugin:8.4.0
     networks:
       - bubo_op
     ports:
@@ -222,6 +224,8 @@ services:
         mode: host
     environment:
       LS_JAVA_OPTS: -Xmx4g -Xms4g
+      pipeline.id: main
+      path.config: /usr/share/logstash/pipeline/*.conf
     deploy:
       endpoint_mode: dnsrr 
       mode: "replicated"
@@ -230,10 +234,7 @@ services:
       - source: process_ioc.rb
         target: /usr/share/logstash/process_ioc.rb
     volumes:
-      - "./logstash/patterns.d/:/usr/share/logstash/patterns.d/"
       - "./pipeline/:/usr/share/logstash/pipeline/"
-    depends_on:
-       - data2
 
   memcached:
     restart: always
@@ -256,7 +257,7 @@ services:
     restart: always
     container_name: misp2memcached
     build: .
-    image: bubocyber/misp2memcached:latest
+    image: bubocyber/misp2memcached_internal:interne
     networks:
       - bubo_op
     deploy:
@@ -282,51 +283,18 @@ networks:
     name: bubo_op
 
 volumes:
-  master1:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/master1"
-      password: bubo
-  data1:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/data1"
-      password: bubo
-  data2:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/data2"
-      password: bubo
-  data3:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/data3"  
-      password: bubo
-  data4:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/data4"  
-      password: bubo
-  coordinate:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/coordinate"
-      password: bubo
-  certs:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/certs"  
-      password: bubo
-  logstash:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/logstash/patterns.d"  
-      password: bubo
-  pipeline:
-    driver: vieux/sshfs:latest
-    driver_opts:
-      sshcmd: "admin-bubo@10.1.1.42:/home/admin-bubo/bubo_cert_prod_v3/pipeline/pipeline.conf"  
-      password: bubo
+   master1 :
+     driver: local
+   data1 :
+     driver: local
+   data2 :
+     driver: local
+   data3 :
+     driver: local
+   data4 :
+     driver: local
+   coordinate :
+     driver: local
 
 configs:
   process_ioc.rb:
