@@ -234,7 +234,7 @@ services:
       - source: process_ioc.rb
         target: /usr/share/logstash/process_ioc.rb
     volumes:
-      - "./pipeline/:/usr/share/logstash/pipeline/"
+      - "./logstash_pipeline/:/usr/share/logstash/pipeline/"
 
   memcached:
     restart: always
