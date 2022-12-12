@@ -257,7 +257,7 @@ services:
     restart: always
     container_name: misp2memcached
     build: .
-    image: bubocyber/misp2memcached_internal:interne
+    image: bubocyber/misp2memcached:latest
     networks:
       - bubo_op
     deploy:
