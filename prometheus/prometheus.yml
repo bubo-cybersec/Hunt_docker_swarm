@@ -1,0 +1,32 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+#  - job_name: 'opensearch'
+#    static_configs:
+ #     - targets: ['container_name:9300'] # Remplacez container_name par le nom de vos conteneurs OpenSearch
+  - job_name: opensearch
+    scheme: https
+  #scrape_interval: 10s
+    metrics_path: "/_prometheus/metrics"
+    static_configs:
+      - targets:
+        - data1:9200
+        - master1:9200
+        - data2:9200
+        - data3:9200
+        - data4:9200
+        - coordinate:9200
+    basic_auth:
+      username: admin
+      password: bubo
+    tls_config:
+      insecure_skip_verify: true
+
+  - job_name: 'logstash'
+#    scrape_interval: 10s
+    static_configs:
+      - targets: ['10.1.1.65:9304']
+        labels:
+          instance: 'logstash1'
+          instance_pqdn: 'logstash1'
