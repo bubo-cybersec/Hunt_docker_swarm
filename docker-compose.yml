@@ -2,7 +2,7 @@ version: '3.7'
 services:
   opensearch_master1:
     restart: always
-    image: opensearchproject/opensearch:2.9.0
+    image: opensearchproject/opensearch:2.11.0
     container_name: master1
     hostname: master1
     ulimits:
@@ -29,11 +29,11 @@ services:
       replicas: 1
     networks:
       - bubo_op
-    command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
+#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
 
   opensearch_data1:
     restart: always
-    image: opensearchproject/opensearch:2.9.0
+    image: opensearchproject/opensearch:2.11.0
     container_name: data1
     hostname: data1
     ulimits:
@@ -54,17 +54,17 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.hostname == swarm2]
+        constraints: [node.hostname == worker]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
     networks:
       - bubo_op
-    command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
+#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
     
   opensearch_data2:
     restart: always
-    image: opensearchproject/opensearch:2.9.0
+    image: opensearchproject/opensearch:2.11.0
     container_name: data2
     hostname: data2
     ulimits:
@@ -85,17 +85,17 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.hostname == swarm3]
+        constraints: [node.role == manager]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
     networks:
       - bubo_op
-    command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
+#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
    
   opensearch_data3:
     restart: always
-    image: opensearchproject/opensearch:2.9.0
+    image: opensearchproject/opensearch:2.11.0
     container_name: data3
     hostname: data3
     ulimits:
@@ -122,11 +122,11 @@ services:
       replicas: 1
     networks:
       - bubo_op
-    command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
+#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
     
   opensearch_data4:
     restart: always
-    image: opensearchproject/opensearch:2.9.0
+    image: opensearchproject/opensearch:2.11.0
     container_name: data4
     hostname: data4
     ulimits:
@@ -147,17 +147,17 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.hostname == swarm2]
+        constraints: [node.hostname == worker]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
     networks:
        - bubo_op
-    command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
+#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
     
   opensearch_coordinate:
     restart: always
-    image: opensearchproject/opensearch:2.9.0
+    image: opensearchproject/opensearch:2.11.0
     container_name: coordinate
     hostname: coordinate
     ulimits:
@@ -178,17 +178,17 @@ services:
         target: /usr/share/opensearch/config/jvm.options
     deploy:
       placement:
-        constraints: [node.hostname == swarm3]
+        constraints: [node.hostname == worker]
       endpoint_mode: dnsrr
       mode: "replicated"
       replicas: 1
     networks:
       - bubo_op
-    command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
+#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
     
   opensearch-dashboards:
     restart: always
-    image: opensearchproject/opensearch-dashboards:2.9.0
+    image: opensearchproject/opensearch-dashboards:2.11.0
     environment:
       OPENSEARCH_HOSTS: '["https://data1:9200","https://data2:9200","https://data3:9200","https://data4:9200"]'
       DISABLE_INSTALL_DEMO_CONFIG: "true"
@@ -219,7 +219,7 @@ services:
       - bubo_op
     ports:
       - 5044:5044
-      - 9304:9304
+#      - 9304:9304
     environment:
       LS_JAVA_OPTS: -Xmx6g -Xms6g
       pipeline.id: main
@@ -228,8 +228,8 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-      placement:
-        constraints: [node.hostname == swarm3]
+      # placement:
+      #   constraints: [node.hostname == swarm3]
     configs:
       - source: process_ioc.rb
         target: /usr/share/logstash/process_ioc.rb
@@ -277,17 +277,17 @@ services:
       placement:
         constraints: [node.role == manager]      
       
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - "./prometheus:/etc/prometheus"
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
-    networks:
-      - bubo_op
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - "./prometheus:/etc/prometheus"
+  #   command:
+  #     - --config.file=/etc/prometheus/prometheus.yml
+  #   networks:
+  #     - bubo_op
 
 networks:
   bubo_op:
