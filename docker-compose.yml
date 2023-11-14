@@ -15,7 +15,7 @@ services:
     volumes:
       - "./master1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./script/:/usr/share/opensearch/script"
+#           - "./script/:/usr/share/opensearch/script"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -46,7 +46,7 @@ services:
     volumes:
       - "./data1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./script/:/usr/share/opensearch/script"
+#           - "./script/:/usr/share/opensearch/script"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -77,7 +77,7 @@ services:
     volumes:
       - "./data2/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./script/:/usr/share/opensearch/script"
+#           - "./script/:/usr/share/opensearch/script"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -108,7 +108,7 @@ services:
     volumes:
       - "./data3/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./script/:/usr/share/opensearch/script"
+#           - "./script/:/usr/share/opensearch/script"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -139,7 +139,7 @@ services:
     volumes:
       - "./data4/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch./config/certificates"
-      - "./script/:/usr/share/opensearch/script"
+#           - "./script/:/usr/share/opensearch/script"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -170,7 +170,7 @@ services:
     volumes:
       - "./coordinate/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./script/:/usr/share/opensearch/script"
+#           - "./script/:/usr/share/opensearch/script"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
