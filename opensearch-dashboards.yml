@@ -13,3 +13,17 @@ server.ssl.key: "/usr/share/opensearch-dashboards/config/certificates/os-dashboa
 opensearch.ssl.certificateAuthorities: ["/usr/share/opensearch-dashboards/config/certificates/ca/ca.pem"]
 opensearch.ssl.verificationMode: full
 opensearch_security.cookie.secure: true
+
+opensearchDashboards.branding:
+  logo:
+    defaultUrl: "https://raw.githubusercontent.com/bubo-cybersec/images/cb4588980f8d8db1bed49d66bd951fe67f4d6a14/thumbnail_BUBO%20HUNT%20long%20v2.png"
+    darkModeUrl: "https://raw.githubusercontent.com/bubo-cybersec/images/cb4588980f8d8db1bed49d66bd951fe67f4d6a14/thumbnail_BUBO%20HUNT%20long%20v2.png"
+  mark:
+    defaultUrl: "https://raw.githubusercontent.com/bubo-cybersec/images/main/logo_bubo_sf.png"
+    darkModeUrl: "https://raw.githubusercontent.com/bubo-cybersec/images/main/logo_bubo_sf.png"
+  loadingLogo:
+    defaultUrl: "https://raw.githubusercontent.com/bubo-cybersec/images/main/logo_bubo_sf.png"
+    darkModeUrl: "https://raw.githubusercontent.com/bubo-cybersec/images/main/logo_bubo_sf.png"
+  faviconUrl: "https://raw.githubusercontent.com/bubo-cybersec/images/main/logo_bubo_sf.png"
+  applicationTitle: "BUBO Hunt"
+  useExpandedHeader: false
