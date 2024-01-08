@@ -2,7 +2,7 @@ version: '3.7'
 services:
   opensearch_master1:
     restart: always
-    image: opensearchproject/opensearch:2.11.0
+    image: opensearchproject/opensearch:2.11.1
     container_name: master1
     hostname: master1
     ulimits:
@@ -16,6 +16,7 @@ services:
       - "./master1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
 #           - "./script/:/usr/share/opensearch/script"
+      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -47,6 +48,7 @@ services:
       - "./data1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
 #           - "./script/:/usr/share/opensearch/script"
+      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -78,6 +80,7 @@ services:
       - "./data2/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
 #           - "./script/:/usr/share/opensearch/script"
+      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -109,6 +112,7 @@ services:
       - "./data3/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
 #           - "./script/:/usr/share/opensearch/script"
+      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -140,6 +144,8 @@ services:
       - "./data4/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch./config/certificates"
 #           - "./script/:/usr/share/opensearch/script"
+      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
+
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -171,6 +177,8 @@ services:
       - "./coordinate/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
 #           - "./script/:/usr/share/opensearch/script"
+      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
+
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
