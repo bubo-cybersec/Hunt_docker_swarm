@@ -2,7 +2,7 @@ version: '3.7'
 services:
   opensearch_master1:
     restart: always
-    image: opensearchproject/opensearch:2.11.1
+    image: opensearchproject/opensearch:2.14.0
     container_name: master1
     hostname: master1
     ulimits:
@@ -15,7 +15,6 @@ services:
     volumes:
       - "./master1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-#           - "./script/:/usr/share/opensearch/script"
       - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
@@ -30,11 +29,10 @@ services:
       replicas: 1
     networks:
       - bubo_op
-#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
 
   opensearch_data1:
     restart: always
-    image: opensearchproject/opensearch:2.11.0
+    image: opensearchproject/opensearch:2.14.0
     container_name: data1
     hostname: data1
     ulimits:
@@ -47,7 +45,6 @@ services:
     volumes:
       - "./data1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-#           - "./script/:/usr/share/opensearch/script"
       - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
@@ -62,11 +59,10 @@ services:
       replicas: 1
     networks:
       - bubo_op
-#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
     
   opensearch_data2:
     restart: always
-    image: opensearchproject/opensearch:2.11.0
+    image: opensearchproject/opensearch:2.14.0
     container_name: data2
     hostname: data2
     ulimits:
@@ -79,7 +75,6 @@ services:
     volumes:
       - "./data2/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-#           - "./script/:/usr/share/opensearch/script"
       - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
@@ -94,111 +89,12 @@ services:
       replicas: 1
     networks:
       - bubo_op
-#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
-   
-  opensearch_data3:
-    restart: always
-    image: opensearchproject/opensearch:2.11.0
-    container_name: data3
-    hostname: data3
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    volumes:
-      - "./data3/:/usr/share/opensearch/data/"
-      - "./certs:/usr/share/opensearch/config/certificates"
-#           - "./script/:/usr/share/opensearch/script"
-      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
-    configs:
-      - source: opensearch.yml
-        target: /usr/share/opensearch/config/opensearch.yml
-      - source: jvm.options
-        target: /usr/share/opensearch/config/jvm.options
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-      endpoint_mode: dnsrr
-      mode: "replicated"
-      replicas: 1
-    networks:
-      - bubo_op
-#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
-    
-  opensearch_data4:
-    restart: always
-    image: opensearchproject/opensearch:2.11.0
-    container_name: data4
-    hostname: data4
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    volumes:
-      - "./data4/:/usr/share/opensearch/data/"
-      - "./certs:/usr/share/opensearch./config/certificates"
-#           - "./script/:/usr/share/opensearch/script"
-      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
 
-    configs:
-      - source: opensearch.yml
-        target: /usr/share/opensearch/config/opensearch.yml
-      - source: jvm.options
-        target: /usr/share/opensearch/config/jvm.options
-    deploy:
-      placement:
-        constraints: [node.hostname == worker]
-      endpoint_mode: dnsrr
-      mode: "replicated"
-      replicas: 1
-    networks:
-       - bubo_op
-#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
-    
-  opensearch_coordinate:
-    restart: always
-    image: opensearchproject/opensearch:2.11.0
-    container_name: coordinate
-    hostname: coordinate
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    volumes:
-      - "./coordinate/:/usr/share/opensearch/data/"
-      - "./certs:/usr/share/opensearch/config/certificates"
-#           - "./script/:/usr/share/opensearch/script"
-      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
-
-    configs:
-      - source: opensearch.yml
-        target: /usr/share/opensearch/config/opensearch.yml
-      - source: jvm.options
-        target: /usr/share/opensearch/config/jvm.options
-    deploy:
-      placement:
-        constraints: [node.hostname == worker]
-      endpoint_mode: dnsrr
-      mode: "replicated"
-      replicas: 1
-    networks:
-      - bubo_op
-#     command: ["sh", "-c", "./script/opensearch-docker-entrypoint.sh"]
-    
   opensearch-dashboards:
     restart: always
-    image: opensearchproject/opensearch-dashboards:2.11.0
+    image: opensearchproject/opensearch-dashboards:2.14.0
     environment:
-      OPENSEARCH_HOSTS: '["https://data1:9200","https://data2:9200","https://data3:9200","https://data4:9200"]'
+      OPENSEARCH_HOSTS: '["https://data1:9200","https://data2:9200"]'
       DISABLE_INSTALL_DEMO_CONFIG: "true"
     ports:
       - 5601:5601
@@ -308,12 +204,6 @@ volumes:
    data1 :
      driver: local
    data2 :
-     driver: local
-   data3 :
-     driver: local
-   data4 :
-     driver: local
-   coordinate :
      driver: local
 
 configs:
