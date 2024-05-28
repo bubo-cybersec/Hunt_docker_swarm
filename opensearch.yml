@@ -7,9 +7,9 @@ discovery.seed_hosts:
     - 'master1'
     - 'data1'
     - 'data2'
-    - 'data3'
-    - 'data4'
-    - 'coordinate'
+    # - 'data3'
+    # - 'data4'
+    # - 'coordinate'
 bootstrap.memory_lock: "true" #disables swapping
 cluster.initial_master_nodes: master1
 cluster.routing.allocation.disk.threshold_enabled: true
