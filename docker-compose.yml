@@ -139,6 +139,7 @@ services:
         target: /usr/share/logstash/process_ioc.rb
     volumes:
       - "./logstash_pipeline/:/usr/share/logstash/pipeline/"
+      - "./patterns/:/usr/share/logstash/patterns"
 
   memcached:
     restart: always
