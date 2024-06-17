@@ -15,7 +15,7 @@ services:
     volumes:
       - "./master1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
+      - "./internal_user.yml:/usr/share/opensearch/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -45,7 +45,7 @@ services:
     volumes:
       - "./data1/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
+      - "./internal_user.yml:/usr/share/opensearch/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
@@ -75,7 +75,7 @@ services:
     volumes:
       - "./data2/:/usr/share/opensearch/data/"
       - "./certs:/usr/share/opensearch/config/certificates"
-      - "./internal_user.yml:/config/opensearch-security/internal_users.yml"
+      - "./internal_user.yml:/usr/share/opensearch/config/opensearch-security/internal_users.yml"
     configs:
       - source: opensearch.yml
         target: /usr/share/opensearch/config/opensearch.yml
