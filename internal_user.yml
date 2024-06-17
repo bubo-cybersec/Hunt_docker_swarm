@@ -6,21 +6,15 @@ _meta:
   config_version: 2
 
 # Define your internal users here
-personalread:
-hash: "$2y$12$wkQWO0WBkmDqBZvh6xLwSuGOKi3dZlu8l0eVrHRFTISsgunSzs.wy"
-reserved: false
-backend_roles:
-  - "kibanauser"
-  - "readall"
 
 bubo:
-  hash: "$2y$12$KKjjMdeFXq1fzhU6yOmpVeRwRumzre4OPRjit4TOII4DKgbWC6N5W"
+  hash: ""
   reserved: true
   backend_roles:
   - "admin"
 
 personaladmin:
-  hash: "$2y$12$jU36kTCSfGjF5MhKj6oAE.zDJhxsPGeC6qQ7518lInx8AKWWYjry."
+  hash: ""
   reserved: true
   backend_roles:
   - "admin"
